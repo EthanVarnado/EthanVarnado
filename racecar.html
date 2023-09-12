@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Racecar Simulator</title>
+  <style>
+    #car1 {
+      position: absolute;
+      top: 100px;
+      width: 150px;
+      height: 100px;
+      background-image: url(McQueen.png);
+      background-size: 150px 100px;
+
+    }
+
+    #car2 {
+      position: absolute;
+      top: 500px;
+      width: 150px;
+      height: 100px;
+      background-image: url(Hicks.png);
+      background-size: 150px 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="car1"></div>
+  <div id="car2"></div>
+</body>
+
+</html>
+<script>
+  var topCarOne = 100
+  var rightCarOne = 0
+  var topCarTwo = 500
+  var rightCarTwo = 0
+  document.addEventListener("keydown", keyHandler)
+
+
+  function keyHandler(e) {
+    if (e.key === "s") {
+      topCarOne = topCarOne + 5
+      document.getElementById("car1").style.top = topCarOne + "px"
+    }
+    if (e.key === "w") {
+      topCarOne = topCarOne - 5
+      document.getElementById("car1").style.top = topCarOne + "px"
+
+    }
+    if (e.key === "d") {
+      rightCarOne = rightCarOne + 5
+      document.getElementById("car1").style.left = rightCarOne + "px"
+    }
+    if (e.key === "a") {
+      rightCarOne = rightCarOne - 5
+      document.getElementById("car1").style.left = rightCarOne + "px"
+    }
+    if (e.key === "k") {
+      topCarTwo = topCarTwo + 5
+      document.getElementById("car2").style.top = topCarTwo + "px"
+    }
+    if (e.key === "i") {
+      topCarTwo = topCarTwo - 5
+      document.getElementById("car2").style.top = topCarTwo + "px"
+
+    }
+    if (e.key === "l") {
+      rightCarTwo = rightCarTwo + 5
+      document.getElementById("car2").style.left = rightCarTwo + "px"
+    }
+    if (e.key === "j") {
+      rightCarTwo = rightCarTwo - 5
+      document.getElementById("car2").style.left = rightCarTwo + "px"
+    }
+    if (topCarOne >= 575) {
+      topCarOne = 575
+    }
+    if (topCarTwo >= 575) {
+      topCarTwo = 575
+    }
+    if (topCarOne <= 0) {
+      topCarOne = 0
+    }
+    if (topCarTwo <= 0) {
+      topCarTwo = 0
+    }
+    if (rightCarOne >= 1220) {
+      rightCarOne = 1220
+    }
+    if (rightCarTwo >= 1220) {
+      rightCarTwo = 1220
+    }
+    if (rightCarOne <= 0) {
+      rightCarOne = 0
+    }
+    if (rightCarTwo <= 0) {
+      rightCarTwo = 0
+    }
+
+  }
+</script>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <style>
+    body {
+      background-image: url(Mccavern.png);
+    }
+
+    #box {
+      position: absolute;
+      background-image: url(steveface.png);
+      background-size: 50px 50px;
+      width: 50px;
+      height: 50px;
+    }
+
+    #speedBox {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      background-image: url(dirtblock.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+      width: 255px;
+      height: 50px;
+      text-align: left;
+      line-height: 50px;
+      color: #a79e9f;
+      font-family: Impact;
+      font-size: 25px;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+    }
+
+    #slowBox {
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      background-image: url(bedrock.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+      width: 100px;
+      height: 50px;
+      text-align: right;
+      line-height: 50px;
+      color: #a79e9f;
+      font-family: Impact;
+      font-size: 25px;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+
+    }
+    #randomSpeed {
+      position: absolute;
+      left: 100px;
+      top: 0px;
+      text-align: center;
+      line-height: 50px;
+      color: #a79e9f;
+      font-family: Impact;
+      font-size: 25px;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+
+    }
+    #wallLeft {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 50px;
+      height: 600px;
+      background-image: url(stonetexture.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+    }
+
+    #wallRight {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      width: 50px;
+      height: 600px;
+      background-image: url(stonetexture.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+    }
+
+    #wallTop {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 1355px;
+      height: 50px;
+      background-image: url(stonetexture.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+    }
+
+    #wallBottom {
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      width: 1365px;
+      height: 50px;
+      background-image: url(stonetexture.png);
+      background-size: 50px 50px;
+      background-repeat: inherit;
+    }
+  </style>
+  <link rel="icon" href="steveface.png">
+  <title>Cave Game</title>
+</head>
+
+<body>
+  <div id="box"></div>
+  <div id="wallLeft"></div>
+  <div id="wallRight"></div>
+  <div id="wallTop"></div>
+  <div id="wallBottom"></div>
+  <div id="speedBox">x2 Speed</div>
+  <div id="slowBox">/2 Speed</div>
+  <div id="randomSpeed">Random Speed</div>
+</body>
+
+</html>
+<script>
+  var leftPos = Math.random() * 1220 + 50
+  var topPos = Math.random() * 475 + 50
+  var horSpeed = 1
+  var verSpeed = 1
+
+  document.getElementById("speedBox").addEventListener("click", clickBoxSpeed)
+  document.getElementById("slowBox").addEventListener("click", clickBoxSlow)
+  document.getElementById("randomSpeed").addEventListener("click", clickBoxRandom)
+  function clickBoxSpeed() {
+    horSpeed = horSpeed * 2
+    verSpeed = verSpeed * 2
+  }
+  function clickBoxSlow() {
+    horSpeed = horSpeed / 2
+    verSpeed = verSpeed / 2
+  }
+  function clickBoxRandom(){
+    horSpeed = Math.random() * 50 + 1
+    verSpeed = Math.random() * 50 + 1
+  }
+  function moveBox() {
+    leftPos = leftPos + horSpeed
+    document.getElementById("box").style.left = leftPos + "px"
+    topPos = topPos + verSpeed
+    document.getElementById("box").style.top = topPos + "px"
+    if (leftPos <= 50) {
+      horSpeed = horSpeed * -1
+      leftPos = leftPos + horSpeed
+      document.getElementById("box").style.left = leftPos + "px"
+    }
+    if (leftPos >= 1270) {
+      horSpeed = horSpeed * -1
+      leftPos = leftPos + horSpeed
+      document.getElementById("box").style.left = leftPos + "px"
+    }
+    if (topPos <= 50) {
+      verSpeed = verSpeed * -1
+      topPos = topPos + verSpeed
+      document.getElementById("box").style.top = topPos + "px"
+    }
+    if (topPos >= 525) {
+      verSpeed = verSpeed * -1
+      topPos = topPos + verSpeed
+      document.getElementById("box").style.top = topPos + "px"
+    }
+  }
+  setInterval(moveBox, 1)
+</script>

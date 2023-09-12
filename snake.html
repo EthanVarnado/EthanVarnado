@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800">
+    </canvas>
+</body>
+
+</html>
+<script>
+    var x = 0
+    var y = 0
+    var canvas = document.getElementById("canvas")
+    var ctx = canvas.getContext("2d")
+
+    for (var i = 0; i < 10; i = i + 1) {
+        for (var j = 0; j < 10; j = j + 1) {
+            ctx.fillRect(i * 75, j * 75, 50, 50)
+        }
+    }
+    ctx.fillStyle = "red"
+    ctx.fillRect(75, 75, 50, 50)
+</script>

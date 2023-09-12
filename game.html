@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>My Game</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+</body>
+
+</html>
+<script>
+    var fruitx = []
+    var fruity = []
+    var x = 500
+    var y = 500
+    var yspeed = 0
+    var xspeed = 5
+    var canvas = document.getElementById("canvas")
+    var ctx = canvas.getContext("2d")
+    document.addEventListener("keydown", keyHandler)
+    for (i = 0; i > 4; i = i + 1){
+        fruitx.push(Math.random() * 975 * 25)
+        fruitx.push(Math.random() * 975 * 25)
+        ctx.beginPath()
+        ctx.arc(fruitx[i], fruity[i], 10, 0, Math.PI * 2)
+        ctx.fill()
+    }
+    function main() {
+        ctx.clearRect(0, 0, 2000, 2000)
+        ctx.fillRect(x, y, 25, 25)
+        x = x + xspeed
+        y = y + yspeed
+    }
+    function keyHandler(data) {
+        if (data.key === "w") {
+            xspeed = 0
+            yspeed = -5
+        }
+        if (data.key === "s") {
+            xspeed = 0
+            yspeed = 5
+        }
+        if (data.key === "a") {
+            yspeed = 0
+            xspeed = -5
+        }
+        if (data.key === "d") {
+            yspeed = 0
+            xspeed = 5
+        }
+    }
+    setInterval(main, 30)
+</script>

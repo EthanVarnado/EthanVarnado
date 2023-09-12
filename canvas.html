@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+<canvas id="canvas" width="800" height="800">
+</canvas>
+</body>
+</html>
+<script>
+  var canvas= document.getElementById("canvas")
+  var ctx = canvas.getContext("2d")
+setInterval(drawFrame, 1)
+var x = 125
+var horizontal = 250
+var y = 25
+var vertical = 50
+var xspeed = 1
+var horSpeed = 1
+var yspeed = 1
+var verSpeed = 1
+function drawFrame(){
+  x = x + xspeed
+  horizontal = horizontal + horSpeed
+  y = y + yspeed
+  vertical = vertical + verSpeed
+  ctx.fillRect(x,y,10,10)
+  ctx.fillRect(horizontal,vertical,10,10)
+  if (y <= vertical){
+    yspeed = yspeed + 1
+    verSpeed = verSpeed - 1
+  }else {
+    yspeed = yspeed - 1
+    verSpeed = verSpeed + 1
+  }
+  if (x <= horizontal){
+    xspeed = xspeed + 1
+    horSpeed = horSpeed - 1
+  }else{
+    xspeed = xspeed - 1
+    horSpeed = horSpeed + 1
+  }
+}
+
+</script>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpvfgdvsJ51ErXKl2DQ_g-WPUNGVLMbmUuew&usqp=CAU);
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .clicktext {
+            background-color: yellowgreen;
+            border: 4px solid black;
+            width: 17.5%;
+        }
+
+        #cena {
+            margin-left: 20%;
+            margin-top: 0%;
+            width: 60%;
+        }
+    </style>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="johnico.ico">
+    <title>Clicker Website</title>
+</head>
+
+<body>
+    <div class="clicktext">
+        <p>
+        <h1 id="score">0 Clicks</h1>
+        </p>
+        <h3 id="upgrade">Click Upgrade</h3>
+        <h3 id="autoclicker">Auto Click Upgrade</h3>
+        <h3 id="autoclickspeed">Auto Click Speed</h3>
+    </div>
+    <img id="cena" src="john.png">
+</body>
+
+</html>
+<script>
+    var score = 0
+    var scorePerClick = 1
+    var clickPrice = 25
+    var autoPrice = 50
+    var autoTime = 5000
+    var speedPrice = 100
+
+    document.getElementById("cena").addEventListener("click", clickHandler)
+    document.getElementById("upgrade").addEventListener("click", clickUpgrade)
+    document.getElementById("autoclicker").addEventListener("click", clickAuto)
+    document.getElementById("autoclickspeed").addEventListener("click", autoSpeed)
+    document.getElementById("score").innerText = score
+
+    function checkScore() {
+        if (score >= 100) {
+            document.getElementById("cena").src = "justin.png"
+        }
+
+        if (score >= 200) {
+            document.getElementById("cena").src = "cenastare.jpg"
+        }
+    }
+
+    function clickHandler() {
+        score = score + scorePerClick
+        document.getElementById("score").innerText = score
+    }
+
+
+    function clickUpgrade() {
+        if (score >= clickPrice) {
+            scorePerClick = scorePerClick * 2
+            score = score - clickPrice
+            clickPrice = clickPrice * 2
+            document.getElementById("score").innerText = score
+        }
+    }
+    function autoSpeed() {
+        if (score >= speedPrice) {
+            autoTime = autoTime / 2
+            score = score - speedPrice
+            speedPrice = speedPrice * 2
+            document.getElementById("score").innerText = score
+        }
+    }
+
+    function clickAuto() {
+        if (score >= autoPrice) {
+            setInterval(clickHandler, autoTime)
+            score = score - autoPrice
+            autoPrice = autoPrice * 2
+            document.getElementById("score").innerText = score
+        }
+    }
+</script>

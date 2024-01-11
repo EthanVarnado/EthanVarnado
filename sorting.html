@@ -19,13 +19,35 @@
     var textPadding = 3
 
     var listToSort = makeRandomList(length)
-    var sortedList = listToSort
+    var sortedList = quickSort(listToSort)
+    
 
-
-    //sortedList = quickSort(listToSort)
+    
 
     function quickSort(list) {
-
+        var pivot = list[0]
+        showCurrentSort(list, pivot)
+        var leftList = []
+        var rightList  = []
+        for (var i = 0; i < list.length; i = i + 1){
+            if(list[i]<pivot  ){
+            leftList.push(list[i])
+            }
+            if(list[i]>pivot ){
+            rightList.push(list[i])
+            }
+        }
+        if(leftList.length !== 0){
+        leftList = quickSort(leftList)
+        }
+        if(rightList.length !== 0){
+        rightList = quickSort(rightList) 
+        } 
+        var answer = leftList
+        answer.push(pivot)
+        answer = answer.concat(rightList)
+        showCurrentSort(answer, pivot)
+        return answer 
     }
 
     function sortNumbers() {

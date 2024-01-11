@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>JS Bin</title>
+    <title>Snake</title>
 </head>
 
 <body>
-    <canvas id="canvas" width="800" height="800">
+    <canvas id="canvas" width="500" height="500">
     </canvas>
 </body>
 
@@ -16,14 +16,138 @@
 <script>
     var x = 0
     var y = 0
+    var tailx = [-100, -100,]
+    var taily = [-100, -100,]
+    var size = 48
+    var fruitx = Math.floor(Math.random() * 10) * 50
+    var fruity = Math.floor(Math.random() * 10) * 50
+    var tracker = ""
     var canvas = document.getElementById("canvas")
     var ctx = canvas.getContext("2d")
+    document.addEventListener("keydown", keyHandler)
+    setInterval(drawEverything, 250)
+    function drawEverything() {
+        for (var i = 0; i < 15; i = i + 1) {
+            for (var j = 0; j < 17; j = j + 1) {
+                ctx.fillStyle = "black"
+                ctx.fillRect(i * 50, j * 50, 48, 48)
+            }
+        }
+        ctx.fillStyle = "red"
+        ctx.fillRect(x, y, size, size)
+        ctx.fillStyle = "green"
+        ctx.fillRect(fruitx, fruity, size, size)
+        for (i = 0; i < tailx.length; i++) {
+            ctx.fillStyle = "blue"
+            ctx.fillRect(tailx[i], taily[i], size, size)
+            if (tailx[i] === fruitx && taily[i] === fruity) {
+                fruitx = Math.floor(Math.random() * 10) * 50
+                fruity = Math.floor(Math.random() * 10) * 50
+            }
+            if (x === tailx[i] && y === taily[i]) {
+                x = 0
+                y = 0
+                size = 0
+                tracker = ""
+                fruitx = Math.floor(Math.random() * 10) * 50
+                fruity = Math.floor(Math.random() * 10) * 50
+                tailx = [-100, -100,]
+                taily = [-100, -100,]
+            }
+        }
 
-    for (var i = 0; i < 10; i = i + 1) {
-        for (var j = 0; j < 10; j = j + 1) {
-            ctx.fillRect(i * 75, j * 75, 50, 50)
+
+        if (x >= 500) {
+            x = 0
+            y = 0
+            size = 0
+            tracker = ""
+            fruitx = Math.floor(Math.random() * 10) * 50
+            fruity = Math.floor(Math.random() * 10) * 50
+            tailx = [-100, -100,]
+            taily = [-100, -100,]
+
+        }
+        if (x < 0) {
+            x = 0
+            y = 0
+            size = 0
+            tracker = ""
+            fruitx = Math.floor(Math.random() * 10) * 50
+            fruity = Math.floor(Math.random() * 10) * 50
+            tailx = [-100, -100,]
+            taily = [-100, -100,]
+
+        }
+        if (y < 0) {
+            x = 0
+            y = 0
+            size = 0
+            tracker = ""
+            fruitx = Math.floor(Math.random() * 10) * 50
+            fruity = Math.floor(Math.random() * 10) * 50
+            tailx = [-100, -100,]
+            taily = [-100, -100,]
+        }
+        if (y >= 500) {
+            x = 0
+            y = 0
+            size = 0
+            tracker = ""
+            fruitx = Math.floor(Math.random() * 10) * 50
+            fruity = Math.floor(Math.random() * 10) * 50
+            tailx = [-100, -100,]
+            taily = [-100, -100,]
+        }
+        if (tracker !== "") {
+
+            tailx.push(x)
+            taily.push(y)
+        }
+        if (tracker === "w") {
+            y = y - 50
+        }
+        if (tracker === "s") {
+            y = y + 50
+        }
+        if (tracker === "a") {
+            x = x - 50
+        }
+        if (tracker === "d") {
+            x = x + 50
+        }
+        if (x === fruitx && y === fruity) {
+            fruitx = Math.floor(Math.random() * 10) * 50
+            fruity = Math.floor(Math.random() * 10) * 50
+        } else {
+            if (tracker !== "") {
+                tailx.splice(0, 1)
+                taily.splice(0, 1)
+            }
         }
     }
-    ctx.fillStyle = "red"
-    ctx.fillRect(75, 75, 50, 50)
+    function keyHandler(data) {
+        size = 48
+        if (data.key === "d") {
+            if (tracker === "a") {
+                return
+            }
+        }
+        if (data.key === "a") {
+            if (tracker === "d") {
+                return
+            }
+        }
+        if (data.key === "w") {
+            if (tracker === "s") {
+                return
+            }
+        }
+        if (data.key === "s") {
+            if (tracker === "w") {
+                return
+            }
+        }
+        tracker = data.key
+    }
 </script>

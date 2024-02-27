@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Minesweeper</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="1000" height="1000">
+    </canvas>
+</body>
+
+</html>
+<script>
+    var x = 0
+    var y = 0
+    var score = 0
+    var count = 0
+    var covered = []
+    var bomb = []
+    for (i = 0; i < 10; i = i + 1) {
+        covered.push([])
+        bomb.push([])
+        for (j = 0; j < 10; j = j + 1) {
+            covered[i].push(true)
+            bomb[i].push(false)
+        }
+    }
+
+    //  var covered = [[false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false],
+    //      [false, false, false, false, false, false, false, false]]
+    var canvas = document.getElementById("canvas")
+    var ctx = canvas.getContext("2d")
+    var death = false
+    document.addEventListener("click", clickHandler)
+    for (var a = 0; a < 50; a = a + 1) {
+        var subx = Math.floor(Math.random() * i)
+        var suby = Math.floor(Math.random() * j)
+        bomb[subx][suby] = true
+    }
+    function drawEverything() {
+        for (var i = 0; i < covered.length; i = i + 1) {
+            for (var j = 0; j < covered[i].length; j = j + 1) {
+                if (covered[i][j] === false) {
+                    ctx.fillStyle = "red"
+                } else {
+                    ctx.fillStyle = "black"
+                }
+                if (bomb[i][j] === true) {
+                    ctx.fillStyle = "yellow"
+                }
+                ctx.fillRect(i * 50, j * 50, 48, 48)
+            }
+        }
+    }
+    function clickHandler(data) {
+        var trackerx = data.x - (data.x % 50)
+        var trackery = data.y - (data.y % 50)
+        covered[trackerx / 50][trackery / 50] = false
+        if (bomb[(trackerx / 50) + 1][(trackery / 50) + 1] === true) {
+            count = count + 1
+        }
+        if (bomb[(trackerx / 50) - 1][(trackery / 50) - 1] === true) {
+            count = count + 1
+        }
+        if (bomb[(trackerx / 50) - 1][(trackery / 50) + 1] === true) {
+            count = count + 1
+        }
+        if (bomb[(trackerx / 50) + 1][(trackery / 50) - 1] === true) {
+            count = count + 1
+        }
+        if (bomb[(trackerx / 50) + 1][trackery / 50] === true) {
+            count = count + 1
+        }
+        if (bomb[(trackerx / 50) - 1][trackery / 50] === true) {
+            count = count + 1
+        }
+        if (bomb[trackerx / 50][(trackery / 50) + 1] === true) {
+            count = count + 1
+        }
+        if (bomb[trackerx / 50][(trackery / 50) - 1] === true) {
+            count = count + 1
+        }
+        if (bomb[trackerx / 50][trackery / 50] === true) {
+            if (score = 0) {
+                bomb[trackerx / 50][trackery / 50] = false
+            } else {
+                // death = true
+            }
+        }
+        score = score + 1
+        if(count === 0){
+        covered[(trackerx / 50) + 1][(trackery / 50) + 1] = false
+        covered[(trackerx / 50) - 1][(trackery / 50) - 1] = false
+        covered[(trackerx / 50) - 1][(trackery / 50) + 1] = false
+        covered[(trackerx / 50) + 1][(trackery / 50) - 1] = false
+        covered[(trackerx / 50) + 1][trackery / 50] = false
+        covered[(trackerx / 50) - 1][trackery / 50] = false
+        covered[trackerx / 50][(trackery / 50) + 1] = false
+        covered[trackerx / 50][(trackery / 50) - 1] = false
+    }
+        drawEverything()
+        ctx.fillStyle = "blue"
+        ctx.font = "30px Arial";
+        ctx.fillText(count, trackerx + 15, trackery + 35)
+        count = 0
+    }
+    drawEverything()
+</script>

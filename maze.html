@@ -1,0 +1,237 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <title> recursion example</title>
+</head>
+
+<body>
+    <div id="buttons">
+        <button id="downloadButton">save</button>
+        <a id="downloadAnchorElement" style="display:none"></a>
+        <input id="fileName" placeholder="put Filename Here"></input>
+        <input type="file" id="selectFiles" value="Import"></input>
+        <button id="load">load</button>
+        <button id="solve">solve</button>
+        <button id="reset">reset</button>
+    </div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+</body>
+
+</html>
+
+<script>
+    var canvas = document.getElementById("canvas")
+    var ctx = canvas.getContext("2d")
+    canvas.addEventListener("mousemove", mouseCordsSet)
+    canvas.addEventListener("mousedown", mouseDown)
+    canvas.addEventListener("mouseup", mouseUp)
+    document.getElementById("solve").addEventListener("click", solveRecursivly)
+    document.getElementById("reset").addEventListener("click", gridArraySetup)
+    document.getElementById("downloadButton").addEventListener("click", saveGridAsJson)
+    //https://stackoverflow.com/questions/36127648/uploading-a-json-file-and-using-it
+    //link to file import and export functions
+    document.getElementById("load").addEventListener("click", loadGridJson)
+
+
+
+    var gridSize = 20 //the size of the grid squares
+    var highlightGrid = true
+    var gridCollumns = 21
+    var gridRows = 15
+    var mousex
+    var mousey
+    var oldCellX = -1
+    var oldCellY = -1
+    var mouseClick = false
+    var gridArray = [] //this is where the map is stored
+    var previousIndex = null
+
+    setInterval(main, 1)
+    gridArraySetup()
+    addStartAndEndToGrid()
+    //create the grid array 
+
+    function gridArraySetup() {//this thing allows you to declare some temp variables that dissapear after the curly braces, just don't worry about them. i use this so they don't become globals
+        //or maybe it doesn't and I don't understand it well... we'll see
+        gridArray = []
+        for (let i = 0; i < gridRows; i++) {
+            gridArray.push([])
+            for (let j = 0; j < gridCollumns; j++)
+                gridArray[i].push("wall")
+        }
+
+    }
+
+
+    function main() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        createGrid()
+
+        //highlight the current square you are hovering above in grey
+        ctx.fillStyle = "lightgrey"
+        var gridAllignedMousex = mousex - (mousex % gridSize) //using mod to round down mousex to the nearist grid
+        var gridAllignedMousey = mousey - (mousey % gridSize)
+        ctx.fillRect(gridAllignedMousex, gridAllignedMousey, gridSize, gridSize)
+
+
+        if (mouseClick) {
+            mouseClickHandler()
+        }
+    }
+
+    function solveRecursivly() {
+       alert(solve(0, Math.floor(gridCollumns / 2))) //this is where the starting block is
+    }
+
+    function solve(celly, cellx, direction) {
+        //each cell can either be a wall, path, start, or stop. you are looking for the stop
+        // when gridArray[][] === "stop" you have reached your destination
+        var end
+        ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)"
+        ctx.fillRect(cellx * gridSize, celly * gridSize, gridSize, gridSize)
+        if (gridArray[celly][cellx] === "finish") {
+            return [cellx, celly]
+        }
+        try {
+            if (gridArray[celly - 1][cellx] !== "wall") {
+                if (direction !== "down") {
+                    end = solve(celly - 1, cellx, "up")
+                }
+            }
+        } catch (e) { console.log(e) }
+        try {
+            if (gridArray[celly][cellx - 1] !== "wall") {
+                if (direction !== "right") {
+                    end = solve(celly, cellx - 1, "left")
+                }
+            }
+        } catch (e) { console.log(e) }
+        try {
+            if (gridArray[celly][cellx + 1] !== "wall") {
+                if (direction !== "left") {
+                    end = solve(celly, cellx + 1, "right")
+                }
+            }
+        } catch (e) { console.log(e) }
+        try {
+            if (gridArray[celly + 1][cellx] !== "wall") {
+                if (direction !== "up") {
+                    end = solve(celly + 1, cellx, "down")
+                }
+            }
+        } catch (e) { console.log(e) }
+        if (end !== undefined) {
+            return end
+        }
+        ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)"
+        ctx.fillRect(cellx * gridSize, celly * gridSize, gridSize, gridSize)
+
+    }
+
+
+    function mouseClickHandler() {
+        //this function simply makes sure that the x and y points are getting translated into a box
+        var cellX = (mousex - (mousex % gridSize)) / gridSize //using mod to round down mousex to the nearist grid
+        var cellY = (mousey - (mousey % gridSize)) / gridSize
+        if (cellX === oldCellX && cellY === oldCellY) {
+            return //if the mouse hasn't moved don't change them, it's because of the extra drag functionality I have
+            //because you can drag the mouse around you have to do some extra checks
+        }
+        if (gridArray[cellY][cellX] === "wall") {
+            gridArray[cellY][cellX] = "path"
+        } else if (gridArray[cellY][cellX] === "path") {
+            gridArray[cellY][cellX] = "wall"
+        }
+        oldCellX = cellX
+        oldCellY = cellY
+
+    }
+
+
+
+    function createGrid() {
+        ctx.fillStyle = "black"
+        for (let i = 0; i < gridArray.length; i++) { //make all the grid squares
+            for (let j = 0; j < gridArray[i].length; j++) {
+                if (gridArray[i][j] === "start") {
+                    ctx.fillStyle = 'blue'
+                } else if (gridArray[i][j] === "finish") {
+                    ctx.fillStyle = 'red'
+                } else if (gridArray[i][j] === "path") {
+                    ctx.fillStyle = 'white'
+                } else if (gridArray[i][j] === "trail") {
+                    ctx.fillStyle = 'green'
+                } else if (gridArray[i][j] === "wall") {
+                    ctx.fillStyle = 'black'
+                } else {
+                    ctx.fillStyle = 'yellow' //this means I don't know what the cell is
+                }
+
+                ctx.fillRect(j * gridSize, i * gridSize, gridSize, gridSize)
+            }
+        }
+        ctx.strokeStyle = "lightgrey"
+        for (let i = 0; i < gridCollumns * gridSize; i = i + gridSize) {
+            //vertical lines
+            ctx.beginPath()
+            ctx.moveTo(i, 0)
+            ctx.lineTo(i, gridRows * gridSize)
+            ctx.stroke()
+        }
+        for (let i = 0; i < gridRows * gridSize; i = i + gridSize) {
+            //horizontal
+            ctx.beginPath()
+            ctx.moveTo(0, i)
+            ctx.lineTo(gridCollumns * gridSize, i)
+            ctx.stroke()
+        }
+
+    }
+
+    function mouseCordsSet(e) {
+        mousex = e.offsetX
+        mousey = e.offsetY
+    }
+
+    function mouseDown() {
+        mouseClick = true
+    }
+
+    function mouseUp() {
+        mouseClick = false
+    }
+
+
+    function saveGridAsJson() {
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gridArray));
+        downloadAnchorElement.setAttribute("href", dataStr);
+        if (document.getElementById("fileName").value === "") {
+
+            var nameOfJsonFile = "filename.json"
+        } else {
+            var nameOfJsonFile = document.getElementById("fileName").value + ".json"
+        }
+        downloadAnchorElement.setAttribute("download", nameOfJsonFile);
+        downloadAnchorElement.click();
+    }
+
+    function loadGridJson() {
+        var files = document.getElementById('selectFiles').files;
+        var fr = new FileReader();
+        fr.readAsText(files[0])
+        fr.addEventListener("load", () => { //you have to do this really dumb thing because you have to wait for the file reader to finish before you can use the result.
+            // this will then display a text file
+            gridArray = JSON.parse(fr.result)
+        }, false);
+
+    }
+
+    function addStartAndEndToGrid() {
+        gridArray[0][Math.floor(gridCollumns / 2)] = "start"
+        gridArray[gridRows - 1][Math.floor(gridCollumns / 2)] = "finish"
+    }
+
+</script>
